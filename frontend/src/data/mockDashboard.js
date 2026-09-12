@@ -1,0 +1,4 @@
+// Reporting period for the sample dashboard; totals derive from current records.
+export const mockDashboard = {
+  monthKeys: ["2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09"],
+};
