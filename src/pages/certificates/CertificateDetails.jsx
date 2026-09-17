@@ -1,0 +1,22 @@
+import { useCallback, useMemo } from "react";
+import { ArrowLeft, CheckCircle2, Copy, Download, ExternalLink, Printer, ShieldCheck } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCertificateById } from "../../services/certificateService.js";
+import { getInstrumentById } from "../../services/instrumentService.js";
+import { useResource } from "../../hooks/useResource.js";
+import { Breadcrumb, Button, Card, EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from "../../components/common/ui.jsx";
+import { formatDate, optionLabel } from "../../utils/format.js";
+import { instrumentTypes } from "../../config/instrumentConfig.js";
+
+export default function CertificateDetails(){
+ const {id}=useParams(); const nav=useNavigate();
+ const load=useCallback(async()=>{const certificate=await getCertificateById(id);return certificate?{certificate,instrument:await getInstrumentById(certificate.instrumentId)}:null},[id]);
+ const {data,loading,error,reload}=useResource(load);
+ const verifyUrl=useMemo(()=>`${window.location.origin}/verify/${encodeURIComponent(id)}`,[id]);
+ if(loading)return <LoadingState/>;if(error)return <ErrorState message={error} retry={reload}/>;if(!data)return <EmptyState title="Certificate not found" description="This certificate record is unavailable." action={<Button to="/certificates">Back to certificates</Button>}/>;
+ const {certificate,instrument}=data;
+ function copyLink(){navigator.clipboard?.writeText(verifyUrl);}
+ return <div className="certificate-page"><Breadcrumb items={[{label:"Certificates",to:"/certificates"},{label:certificate.id}]}/><PageHeader title={certificate.id} description="Digital certificate of verification." actions={<Button variant="secondary" onClick={()=>nav("/certificates")}><ArrowLeft size={17}/>Back</Button>}/>
+   <div className="certificate-actions"><Button onClick={()=>window.print()}><Printer size={17}/>Print</Button><Button variant="secondary" onClick={()=>window.print()}><Download size={17}/>Download / Save PDF</Button><Button variant="secondary" onClick={copyLink}><Copy size={17}/>Copy verification link</Button></div>
+   <Card className="certificate-shell"><div className="certificate-document" id="certificate-print"><div className="certificate-top"><div className="certificate-brand"><span className="certificate-mark"><ShieldCheck size={27}/></span><div><strong>MeasureSure</strong><small>Legal Metrology Verification System</small></div></div><StatusBadge status={certificate.status}/></div><div className="certificate-heading"><span>OFFICIAL DIGITAL RECORD</span><h2>Certificate of Verification</h2><p>Online Verification System for Weighing &amp; Measuring Instruments</p></div><div className="certificate-id"><span>Certificate ID</span><strong>{certificate.id}</strong></div><div className="certificate-grid"><section><h3>Instrument information</h3><dl><div><dt>Instrument ID</dt><dd>{instrument?.id}</dd></div><div><dt>Type</dt><dd>{optionLabel(instrumentTypes,instrument?.type)}</dd></div><div><dt>Manufacturer</dt><dd>{instrument?.manufacturer}</dd></div><div><dt>Model</dt><dd>{instrument?.model}</dd></div><div><dt>Serial number</dt><dd>{instrument?.serialNumber}</dd></div><div><dt>Capacity</dt><dd>{instrument?.capacity}</dd></div><div><dt>Accuracy</dt><dd>{instrument?.accuracy}</dd></div></dl></section><section><h3>Owner &amp; verification</h3><dl><div><dt>Owner</dt><dd>{instrument?.owner}</dd></div><div><dt>Location</dt><dd>{instrument?.location}</dd></div><div><dt>Verified on</dt><dd>{formatDate(certificate.issueDate)}</dd></div><div><dt>Valid until</dt><dd>{formatDate(certificate.validUntil)}</dd></div><div><dt>Inspector</dt><dd>{certificate.inspector}</dd></div><div><dt>Status</dt><dd><StatusBadge status={certificate.status}/></dd></div></dl></section></div><div className="certificate-footer-grid"><div className="qr-placeholder"><div className="qr-pattern">▦</div><div><strong>Scan to verify</strong><small>Public verification record</small><a href={verifyUrl}>{verifyUrl}</a></div></div><div className="blockchain-record"><div><CheckCircle2 size={20}/><strong>Blockchain record</strong></div><span>Status: {certificate.blockchainStatus}</span><span>Certificate hash: {certificate.hash}</span><span>Transaction ID: {certificate.transactionId}</span></div></div><p className="certificate-note">Prototype certificate for the SIH26036 demonstration. Final legal issuance and blockchain anchoring will be connected to the authority's backend.</p></div></Card></div>;
+}

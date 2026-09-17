@@ -1,0 +1,88 @@
+const verificationHistory = [
+  {
+    id: "VER-2026-00521",
+    certificateId: "CERT-2026-00125",
+    instrumentId: "INS-2026-00125",
+    inspector: "Rajesh Kumar",
+    date: "2026-09-01",
+    result: "VERIFIED",
+    blockchainStatus: "CONFIRMED",
+    transactionId: "0x7a9c…41de",
+  },
+  {
+    id: "VER-2026-00520",
+    certificateId: "CERT-2026-00124",
+    instrumentId: "INS-2026-00123",
+    inspector: "Priya Sharma",
+    date: "2026-08-29",
+    result: "VERIFIED",
+    blockchainStatus: "CONFIRMED",
+    transactionId: "0x51de…22b8",
+  },
+  {
+    id: "VER-2026-00519",
+    certificateId: "CERT-2026-00123",
+    instrumentId: "INS-2026-00120",
+    inspector: "Rajesh Kumar",
+    date: "2026-08-22",
+    result: "VERIFIED",
+    blockchainStatus: "CONFIRMED",
+    transactionId: "0x1e83…bd92",
+  },
+  {
+    id: "VER-2026-00518",
+    certificateId: "CERT-2026-00122",
+    instrumentId: "INS-2026-00118",
+    inspector: "Amit Verma",
+    date: "2026-08-18",
+    result: "VERIFIED",
+    blockchainStatus: "CONFIRMED",
+    transactionId: "0x9c72…e105",
+  },
+  {
+    id: "VER-2026-00517",
+    certificateId: "CERT-2026-00121",
+    instrumentId: "INS-2026-00116",
+    inspector: "Rajesh Kumar",
+    date: "2026-08-14",
+    result: "VERIFIED",
+    blockchainStatus: "CONFIRMED",
+    transactionId: "0x4c91…7fa3",
+  },
+  {
+    id: "VER-2026-00516",
+    certificateId: "CERT-2026-00120",
+    instrumentId: "INS-2026-00114",
+    inspector: "Priya Sharma",
+    date: "2026-08-10",
+    result: "PENDING",
+    blockchainStatus: "PENDING",
+    transactionId: "—",
+  },
+  {
+    id: "VER-2026-00498",
+    certificateId: "CERT-2025-00098",
+    instrumentId: "INS-2026-00122",
+    inspector: "Neha Singh",
+    date: "2026-07-11",
+    result: "EXPIRED",
+    blockchainStatus: "CONFIRMED",
+    transactionId: "0x0b13…8c21",
+  },
+  {
+    id: "VER-2026-00487",
+    certificateId: "CERT-2025-00087",
+    instrumentId: "INS-2026-00117",
+    inspector: "Neha Singh",
+    date: "2026-06-19",
+    result: "EXPIRED",
+    blockchainStatus: "CONFIRMED",
+    transactionId: "0x7f19…c044",
+  },
+];
+
+export async function getVerificationHistory() {
+  await new Promise((resolve) => setTimeout(resolve, 400));
+
+  return verificationHistory;
+}
