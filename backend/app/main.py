@@ -1,5 +1,7 @@
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
+
 from app.models.certificate import Certificate
 from app.schemas.certificate import CertificateCreate
 from app.database import Base, engine, SessionLocal
@@ -16,6 +18,17 @@ from app.schemas.verification import VerificationCreate
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Pramaanika API")
+#CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "https://pramaanika.vercel.app",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def get_db():
